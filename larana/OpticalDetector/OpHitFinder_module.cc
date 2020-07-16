@@ -74,7 +74,7 @@ namespace opdet {
 
     Float_t  fHitThreshold;
     unsigned int fMaxOpChannel;
-
+    bool fUseStartTime;
     calib::IPhotonCalibrator const* fCalib = nullptr;
   };
 
@@ -96,7 +96,8 @@ namespace opdet {
     fInputModule   = pset.get< std::string >("InputModule");
     fGenModule     = pset.get< std::string >("GenModule");
     fInputLabels   = pset.get< std::vector< std::string > >("InputLabels");
-
+    fUseStartTime  = pset.get< bool >("UseStartTime",false);
+    
     for (auto const& ch : pset.get< std::vector< unsigned int > >
                             ("ChannelMasks", std::vector< unsigned int >()))
       fChannelMasks.insert(ch);
@@ -215,7 +216,8 @@ namespace opdet {
 		   geometry,
 		   fHitThreshold,
 		   detectorClocks,
-		   calibrator);
+		   calibrator,
+		   fUseStartTime);
     }else{
 
       // Reserve a large enough array
@@ -254,7 +256,8 @@ namespace opdet {
 		   geometry,
 		   fHitThreshold,
 		   detectorClocks,
-		   calibrator);
+		   calibrator,
+		   fUseStartTime);
     }
     // Store results into the event
     evt.put(std::move(HitPtr));
